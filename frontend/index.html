@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Intelligence — Document Q&A</title>
+    <meta name="description" content="AI-Powered Retrieval-Augmented Generation (RAG) assistant for intelligent document search and summarization.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Glow Canvas -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <div class="app-layout">
+        <!-- Top Navigation Bar -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <h1>RAG<span>.AI</span></h1>
+                    <span class="brand-badge">FAISS + Groq Llama 3.1</span>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <div class="system-status" id="system-status">
+                    <span class="status-dot"></span>
+                    <span class="status-label" id="status-text">Checking backend...</span>
+                </div>
+                <button class="btn-icon" id="clear-chat-btn" title="Clear Conversation" aria-label="Clear chat">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    <span>Clear</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Chat Area -->
+        <main class="chat-container">
+            <div class="messages-feed" id="messages-feed">
+                <!-- Welcome Hero (shown when empty) -->
+                <section class="welcome-hero" id="welcome-hero">
+                    <div class="hero-badge">Knowledge Retrieval Engine</div>
+                    <h2 class="hero-title">Ask anything from your documents</h2>
+                    <p class="hero-subtitle">
+                        Powered by your local FAISS vector embeddings and Groq's high-speed inference. Ask questions, explore citations, and discover insights.
+                    </p>
+
+                    <div class="suggestions-container">
+                        <span class="suggestions-label">Try asking:</span>
+                        <div class="suggestions-grid">
+                            <button class="suggestion-chip" data-prompt="Who is Asraful Hasan?">
+                                <span class="chip-icon">👤</span>
+                                <span>Who is Asraful Hasan?</span>
+                            </button>
+                            <button class="suggestion-chip" data-prompt="What is attention mechanism?">
+                                <span class="chip-icon">⚡</span>
+                                <span>What is attention mechanism?</span>
+                            </button>
+                            <button class="suggestion-chip" data-prompt="Summarize the core topics in the documents">
+                                <span class="chip-icon">📄</span>
+                                <span>Summarize the core topics</span>
+                            </button>
+                            <button class="suggestion-chip" data-prompt="What technical skills and experiences are mentioned?">
+                                <span class="chip-icon">🛠️</span>
+                                <span>Technical skills & experience</span>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Typing Indicator (Template) -->
+            <div class="typing-indicator" id="typing-indicator" style="display: none;">
+                <div class="avatar ai-avatar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                </div>
+                <div class="typing-bubble">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span class="typing-text">Retrieving context & synthesizing answer...</span>
+                </div>
+            </div>
+        </main>
+
+        <!-- Fixed Input Dock -->
+        <footer class="input-dock">
+            <div class="input-wrapper">
+                <div class="input-controls-top">
+                    <div class="topk-selector" title="Number of document chunks to retrieve">
+                        <label for="top-k-select">Retrieval Depth:</label>
+                        <select id="top-k-select">
+                            <option value="3">Top 3 Chunks (Fast)</option>
+                            <option value="5" selected>Top 5 Chunks (Balanced)</option>
+                            <option value="8">Top 8 Chunks (Deep)</option>
+                        </select>
+                    </div>
+                    <div class="keyboard-tip">
+                        <span>Press <kbd>Enter</kbd> to send, <kbd>Shift+Enter</kbd> for new line</span>
+                    </div>
+                </div>
+
+                <form class="input-form" id="chat-form">
+                    <textarea 
+                        id="user-input" 
+                        placeholder="Type your question here..." 
+                        rows="1" 
+                        required
+                        autocomplete="off"
+                    ></textarea>
+                    <button type="submit" id="send-btn" class="send-button" title="Send question">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

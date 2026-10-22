@@ -1,0 +1,13 @@
+Machine Learning: The Engine Behind Modern AI
+Introduction
+Machine Learning (ML) is a core subset of Artificial Intelligence that enables systems to automatically learn and improve from experience without being explicitly programmed. It has become the driving force behind many of the most impressive AI applications we see today.
+The Rise of Machine Learning
+Although the foundational ideas of machine learning date back to the 1950s and 1960s, the field truly exploded in the last two decades. The combination of massive datasets, powerful GPUs, and better algorithms transformed ML from a research curiosity into a practical technology used by almost every major company.
+Key Types of Machine Learning
+Machine Learning is generally divided into several major paradigms:
+Supervised Learning: The model is trained on labeled data, learning to map inputs to known outputs. Common applications include image classification, spam detection, and price prediction.
+Unsupervised Learning: The model discovers hidden patterns or structures in unlabeled data. Techniques such as clustering and dimensionality reduction fall into this category.
+Semi-Supervised Learning: A hybrid approach that uses a small amount of labeled data together with a large amount of unlabeled data to improve learning efficiency.
+Reinforcement Learning: An agent learns by interacting with an environment and receiving rewards or penalties for its actions. This is the approach behind game-playing AIs and robotic control systems.
+Why Machine Learning Matters
+Machine Learning allows computers to handle complex, high-dimensional problems that would be nearly impossible to solve with traditional rule-based programming. From recommendation systems and medical diagnosis to autonomous vehicles and large language models, ML continues to reshape industries and everyday life.
