@@ -277,3 +277,11 @@ python app.py
 | **Port 8000 already in use** | An existing background server is running | Kill the previous process or run on port 8001: `--port 8001` |
 
 ---
+
+## 👨‍💻 Author & Portfolio
+
+**Developed by Md Asraful Hasan**
+
+- **GitHub:** [https://github.com/MDAsrafulhasan](https://github.com/MDAsrafulhasan)
+- **Email:** [soumick940@gmail.com](mailto:soumick940@gmail.com)
+
